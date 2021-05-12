@@ -5,6 +5,7 @@ type Service interface {
 	Store(input InputTask) (Task, error)
 	Show(id InputTaskDetail) (Task, error)
 	Update(inputDetail InputTaskDetail, input InputTask) (Task, error)
+	Destroy(id InputTaskDetail) (bool, error)
 }
 
 type service struct {
@@ -56,4 +57,12 @@ func (s *service) Update(inputDetail InputTaskDetail, input InputTask) (Task, er
 		return updatedTask, err
 	}
 	return updatedTask, nil
+}
+
+func (s *service) Destroy(taskDetail InputTaskDetail) (bool, error) {
+	_, err := s.repository.Destroy(taskDetail)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

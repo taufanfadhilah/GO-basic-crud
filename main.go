@@ -38,6 +38,7 @@ func main() {
 	api.POST("/task", taskHandler.Store)
 	api.GET("/task/:id", taskHandler.Show)
 	api.PUT("/task/:id", taskHandler.Update)
+	api.DELETE("/task/:id", taskHandler.Destory)
 
 	router.Run()
 }

@@ -147,3 +147,36 @@ func (h *taskHandler) Update(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *taskHandler) Destory(c *gin.Context) {
+	var inputDetail task.InputTaskDetail
+	err := c.ShouldBindUri(&inputDetail)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	_, err = h.taskService.Destroy(inputDetail)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := Response{
+		Success: true,
+		Message: "Task has been deleted successfully",
+		Data:    nil,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
