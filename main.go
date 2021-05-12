@@ -37,6 +37,7 @@ func main() {
 	api.GET("/task", taskHandler.Index)
 	api.POST("/task", taskHandler.Store)
 	api.GET("/task/:id", taskHandler.Show)
+	api.PUT("/task/:id", taskHandler.Update)
 
 	router.Run()
 }

@@ -6,6 +6,7 @@ type Repository interface {
 	Insert(task Task) (Task, error)
 	SelectAll() ([]Task, error)
 	SelectById(id int) (Task, error)
+	Update(task Task) (Task, error)
 }
 
 type repository struct {
@@ -36,6 +37,14 @@ func (r *repository) SelectAll() ([]Task, error) {
 func (r *repository) SelectById(id int) (Task, error) {
 	var task Task
 	err := r.db.First(&task, id).Error
+	if err != nil {
+		return task, err
+	}
+	return task, nil
+}
+
+func (r *repository) Update(task Task) (Task, error) {
+	err := r.db.Save(&task).Error
 	if err != nil {
 		return task, err
 	}

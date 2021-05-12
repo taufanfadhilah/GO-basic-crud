@@ -102,3 +102,48 @@ func (h *taskHandler) Show(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *taskHandler) Update(c *gin.Context) {
+	var inputDetail task.InputTaskDetail
+	var input task.InputTask
+
+	err := c.ShouldBindUri(&inputDetail)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	err = c.ShouldBindJSON(&input)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	newTask, err := h.taskService.Update(inputDetail, input)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := Response{
+		Success: true,
+		Message: "Task updated successfully",
+		Data:    newTask,
+	}
+	c.JSON(http.StatusOK, response)
+}

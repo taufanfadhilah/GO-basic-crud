@@ -4,6 +4,7 @@ type Service interface {
 	Index() ([]Task, error)
 	Store(input InputTask) (Task, error)
 	Show(id InputTaskDetail) (Task, error)
+	Update(inputDetail InputTaskDetail, input InputTask) (Task, error)
 }
 
 type service struct {
@@ -40,4 +41,19 @@ func (s *service) Show(id InputTaskDetail) (Task, error) {
 		return task, err
 	}
 	return task, nil
+}
+
+func (s *service) Update(inputDetail InputTaskDetail, input InputTask) (Task, error) {
+	task, err := s.repository.SelectById(inputDetail.ID)
+	if err != nil {
+		return task, err
+	}
+	task.Name = input.Name
+	task.Description = input.Description
+
+	updatedTask, err := s.repository.Update(task)
+	if err != nil {
+		return updatedTask, err
+	}
+	return updatedTask, nil
 }
