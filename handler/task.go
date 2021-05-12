@@ -40,7 +40,7 @@ func (h *taskHandler) Index(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (handler *taskHandler) Store(c *gin.Context) {
+func (h *taskHandler) Store(c *gin.Context) {
 	var input task.InputTask
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -53,7 +53,7 @@ func (handler *taskHandler) Store(c *gin.Context) {
 		return
 	}
 
-	newTask, err := handler.taskService.Store(input)
+	newTask, err := h.taskService.Store(input)
 	if err != nil {
 		response := Response{
 			Success: false,
@@ -70,5 +70,35 @@ func (handler *taskHandler) Store(c *gin.Context) {
 		Data:    newTask,
 	}
 
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *taskHandler) Show(c *gin.Context) {
+	var input task.InputTaskDetail
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	task, err := h.taskService.Show(input)
+	if err != nil {
+		response := Response{
+			Success: false,
+			Message: "Something went wrong",
+			Data:    err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	response := Response{
+		Success: true,
+		Message: "Get task by id",
+		Data:    task,
+	}
 	c.JSON(http.StatusOK, response)
 }

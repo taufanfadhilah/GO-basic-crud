@@ -5,6 +5,7 @@ import "gorm.io/gorm"
 type Repository interface {
 	Insert(task Task) (Task, error)
 	SelectAll() ([]Task, error)
+	SelectById(id int) (Task, error)
 }
 
 type repository struct {
@@ -30,4 +31,13 @@ func (r *repository) SelectAll() ([]Task, error) {
 		return tasks, err
 	}
 	return tasks, nil
+}
+
+func (r *repository) SelectById(id int) (Task, error) {
+	var task Task
+	err := r.db.First(&task, id).Error
+	if err != nil {
+		return task, err
+	}
+	return task, nil
 }

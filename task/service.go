@@ -3,6 +3,7 @@ package task
 type Service interface {
 	Index() ([]Task, error)
 	Store(input InputTask) (Task, error)
+	Show(id InputTaskDetail) (Task, error)
 }
 
 type service struct {
@@ -31,4 +32,12 @@ func (s *service) Store(input InputTask) (Task, error) {
 		return newTask, err
 	}
 	return newTask, nil
+}
+
+func (s *service) Show(id InputTaskDetail) (Task, error) {
+	task, err := s.repository.SelectById(id.ID)
+	if err != nil {
+		return task, err
+	}
+	return task, nil
 }
