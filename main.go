@@ -2,7 +2,7 @@ package main
 
 import (
 	"go-basic-crud/handler"
-	"go-basic-crud/todo"
+	"go-basic-crud/task"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -19,11 +19,11 @@ func main() {
 	}
 
 	// to migrating db schema based on defined entities
-	db.AutoMigrate(&todo.Todo{})
+	db.AutoMigrate(&task.Task{})
 
-	todoRepository := todo.NewRepository(db)
-	todoService := todo.NewService(todoRepository)
-	todoHandler := handler.NewTodoHandler(todoService)
+	taskRepository := task.NewRepository(db)
+	taskService := task.NewService(taskRepository)
+	taskHandler := handler.NewTaskHandler(taskService)
 
 	router := gin.Default()
 	api := router.Group("/api")
@@ -33,8 +33,9 @@ func main() {
 		})
 	})
 
-	// todo routes
-	api.POST("/todo", todoHandler.Store)
+	// task routes
+	api.GET("/task", taskHandler.Index)
+	api.POST("/task", taskHandler.Store)
 
 	router.Run()
 }
