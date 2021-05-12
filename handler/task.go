@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// set response structure
 type Response struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
@@ -32,6 +33,7 @@ func (h *taskHandler) Index(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+
 	response := Response{
 		Success: true,
 		Message: "Get all tasks",
@@ -85,6 +87,7 @@ func (h *taskHandler) Show(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+
 	task, err := h.taskService.Show(input)
 	if err != nil {
 		response := Response{
@@ -95,6 +98,7 @@ func (h *taskHandler) Show(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+
 	response := Response{
 		Success: true,
 		Message: "Get task by id",

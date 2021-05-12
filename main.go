@@ -21,17 +21,13 @@ func main() {
 	// to migrating db schema based on defined entities
 	db.AutoMigrate(&task.Task{})
 
+	// define repository, service, and handler
 	taskRepository := task.NewRepository(db)
 	taskService := task.NewService(taskRepository)
 	taskHandler := handler.NewTaskHandler(taskService)
 
 	router := gin.Default()
 	api := router.Group("/api")
-	api.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 
 	// task routes
 	api.GET("/task", taskHandler.Index)
