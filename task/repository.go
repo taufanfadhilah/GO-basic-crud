@@ -56,6 +56,11 @@ func (r *repository) Destroy(taskDetail InputTaskDetail) (bool, error) {
 	task := Task{
 		ID: taskDetail.ID,
 	}
+	_, recordErr := r.SelectById(taskDetail.ID)
+	if recordErr != nil {
+		return false, recordErr
+	}
+
 	err := r.db.Delete(&task).Error
 	if err != nil {
 		return false, err
